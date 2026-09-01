@@ -40,12 +40,22 @@ button,.btns button{min-height:42px!important;padding:9px 16px!important;border:
 .summary h3{padding-top:19px!important;border-top:1px solid var(--ui-line)!important}.summary .kpis+h3{border-top:0!important;padding-top:0!important}footer{text-align:center!important;color:#87938d!important;font-size:12px!important;padding:12px!important}
 @media(max-width:900px){.bz-nav{padding:10px 12px;display:grid;grid-template-columns:repeat(5,minmax(118px,1fr));overflow-x:auto;flex-wrap:nowrap}.bz-nav a{min-height:48px;font-size:14px}.form-grid,.grid .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.field{padding:14px!important}input,select{min-height:52px!important;font-size:16px!important}button,.btns button{min-height:52px!important;font-size:15px!important}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}.card{scroll-margin-top:76px}}
 @media(max-width:600px){header,.bz-hero{margin:12px!important;padding:19px!important}main{padding:0 12px 28px!important}.card{padding:16px!important}.form-grid,.grid .form-grid{grid-template-columns:1fr!important}.kpis{grid-template-columns:1fr 1fr!important}.btns button{flex:1 1 calc(50% - 8px)}}
-</style><style>.flow-layout{grid-template-columns:1fr!important}.flow-layout>.card{width:100%}.summary h3{padding-top:18px;margin-top:24px!important;border-top:1px solid var(--ui-line)}.summary .kpis+h3{border-top:0;margin-top:12px!important}@media(min-width:900px){.flow-layout .form-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}</style></head>
+</style><style>.flow-layout{grid-template-columns:1fr!important}.flow-layout>.card{width:100%}.summary h3{padding-top:18px;margin-top:24px!important;border-top:1px solid var(--ui-line)}.summary .kpis+h3{border-top:0;margin-top:12px!important}@media(min-width:900px){.flow-layout .form-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}</style><style id="personal-standard-layout">
+.four-col{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+#rounds td,#rounds th{white-space:nowrap!important;line-height:1!important}
+#rounds .score{width:54px!important;min-width:54px!important;min-height:32px!important;height:32px!important;margin:0!important;padding:4px 5px!important;text-align:center!important}
+#rounds td:nth-child(8){min-width:205px!important;white-space:nowrap!important}
+.point-check{display:inline-flex!important;align-items:center!important;gap:2px!important;margin:0 3px 0 0!important;padding:2px 3px!important;border:0!important;background:transparent!important;font-size:11px!important;line-height:1!important}
+.point-check:last-child{margin-right:0!important}.point-check input{width:14px!important;height:14px!important;min-height:14px!important;margin:0!important;padding:0!important}
+#rounds .pill{white-space:nowrap!important}.table-wrap table{min-width:max-content!important}
+@media(max-width:900px){.four-col{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:600px){.four-col{grid-template-columns:1fr!important}}
+</style></head>
 <body><nav class="bz-nav" aria-label="시뮬레이터 이동"><a href="index.html">전체 메뉴</a><a class="active" href="stroke-standard-settlement-4p.html">개인 · 일반</a><a href="stroke-8421-settlement-4p.html">개인 · 8421</a><a href="team-stroke-standard-settlement-4p.html">팀 · 일반</a><a href="team-stroke-8421-settlement-4p.html">팀 · 8421</a></nav>
 <header class="bz-hero"><h1>스트로크 일반 정산 시나리오</h1><p>4인 플레이 · 18홀 타수 차 기반 개인 간 정산 시뮬레이터</p></header>
 <main><div class="grid flow-layout">
 <section class="card settings">
-  <h2>1. 기본 설정</h2>
+  <h2>기본 설정</h2>
   <div class="form-grid">
     <div class="field"><label>타당 포인트</label><input id="unit" type="number" min="0" step="100" value="100"></div>
     <div class="field"><label>1인 최대 획득/손실</label><input id="cap" type="number" min="0" step="1000" value="10000"></div>
@@ -66,9 +76,9 @@ button,.btns button{min-height:42px!important;padding:9px 16px!important;border:
 </section>
 
 <section class="card">
-  <h2>2. 플레이어별 사용</h2>
+  <h2>플레이어별 사용</h2>
   <h3>포인트 멀리건 사용 횟수</h3>
-  <div class="form-grid">
+  <div class="form-grid four-col">
     <div class="field"><label>P1</label><input class="mulligan" data-p="0" type="number" min="0" value="0"></div>
     <div class="field"><label>P2</label><input class="mulligan" data-p="1" type="number" min="0" value="0"></div>
     <div class="field"><label>P3</label><input class="mulligan" data-p="2" type="number" min="0" value="0"></div>
@@ -78,15 +88,15 @@ button,.btns button{min-height:42px!important;padding:9px 16px!important;border:
 </section>
 
 <section class="card">
-  <h2>3. 홀별 입력 및 정산</h2>
+  <h2>홀별 입력 및 정산</h2>
   <div class="note">각 홀에서 모든 플레이어를 1:1로 비교합니다. 포인트 배판 사용 시 현재 홀 배수가 +1되고 사용 비용은 배틀컵에 누적됩니다.</div>
   <div class="table-wrap" style="margin-top:14px"><table><thead><tr><th>홀</th><th>Par</th><th>보너스 홀</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>포인트 배판</th><th>동타 배판</th><th>스코어 배판</th><th>적용 배수</th><th>P1 정산</th><th>P2 정산</th><th>P3 정산</th><th>P4 정산</th></tr></thead><tbody id="rounds"></tbody></table></div>
 </section>
 
 <section class="card">
-  <h2>4. 보너스 포인트 정산</h2>
+  <h2>보너스 포인트 정산</h2>
   <div class="note">롱기는 첫 번째·마지막 Par5, 니어는 첫 번째·마지막 Par3에서 진행됩니다. 기본 획득자는 P1입니다.</div>
-  <div class="form-grid" style="margin-top:14px">
+  <div class="form-grid four-col" style="margin-top:14px">
     <div class="field"><label>롱기 · 4H (첫 Par5)</label><select class="long-winner"><option value="0" selected>P1</option><option value="1">P2</option><option value="2">P3</option><option value="3">P4</option></select></div>
     <div class="field"><label>롱기 · 17H (마지막 Par5)</label><select class="long-winner"><option value="0" selected>P1</option><option value="1">P2</option><option value="2">P3</option><option value="3">P4</option></select></div>
     <div class="field"><label>니어 · 3H (첫 Par3)</label><select class="near-winner"><option value="0" selected>P1</option><option value="1">P2</option><option value="2">P3</option><option value="3">P4</option></select></div>
@@ -95,19 +105,19 @@ button,.btns button{min-height:42px!important;padding:9px 16px!important;border:
 </section>
 
 <section class="card summary">
-  <h2>5. 라운드 최종 결과</h2>
+  <h2>라운드 최종 결과</h2>
   <div class="kpis"><div class="kpi"><span>최대 적용 배수</span><strong id="peak">1배</strong></div><div class="kpi"><span>배판 추가 이동</span><strong id="multiplierEffect">0P</strong></div><div class="kpi"><span>동타 배판 발생</span><strong id="tieCount">0회</strong></div><div class="kpi"><span>스코어 배판 발생</span><strong id="scoreCount">0회</strong></div></div>
-  <h3>5-1. 스코어 및 배판 변화</h3>
+  <h3>스코어 및 배판 변화</h3>
   <div class="table-wrap"><table style="min-width:760px"><thead><tr><th>플레이어</th><th>총 스코어</th><th>기준 타수 대비</th><th>기본 1배 정산</th><th>배판 반영</th><th>배판 증감</th></tr></thead><tbody id="roundSummary"></tbody></table></div>
-  <h3>5-2. 보너스 포인트 정산</h3>
+  <h3>보너스 포인트 정산</h3>
   <div class="note">달성자는 미달성 플레이어 수 × 보너스 포인트를 획득하고, 미달성자는 달성 플레이어 수 × 보너스 포인트를 차감합니다.</div>
   <div class="table-wrap" style="margin-top:14px"><table style="min-width:760px"><thead><tr><th>플레이어</th><th>롱기</th><th>니어</th><th>버디 이상</th><th>롱기 정산</th><th>니어 정산</th><th>버디 이상 정산</th><th>보너스 합계</th></tr></thead><tbody id="bonusSummary"></tbody></table></div>
-  <h3>5-3. 라운드·보너스 합산 상한 적용 비교</h3>
+  <h3>라운드·보너스 합산 상한 적용 비교</h3>
   <div class="note">라운드와 보너스를 합산한 뒤 상한을 적용합니다. 멀리건·배판 차감과 배틀컵 지급은 상한 계산에서 제외됩니다.</div>
   <div class="table-wrap" style="margin-top:14px"><table style="min-width:900px"><thead><tr><th>플레이어</th><th>라운드</th><th>보너스</th><th>상한 미적용 합계</th><th>상한 적용 합계</th><th>상한 조정값</th><th>멀리건·배판 별도 차감</th></tr></thead><tbody id="capCompare"></tbody></table></div>
-  <h3>5-4. 배틀컵 정산</h3>
+  <h3>배틀컵 정산</h3>
   <div class="kpis"><div class="kpi"><span>초기 배틀컵</span><strong id="cupBaseView">600P</strong></div><div class="kpi"><span>멀리건·배판 누적</span><strong id="cupAdded">0P</strong></div><div class="kpi"><span>최종 배틀컵</span><strong id="cupTotal">600P</strong></div><div class="kpi"><span>배틀컵 획득자</span><strong id="cupWinner">P1</strong></div></div>
-  <h3>5-5. 최종 결과</h3><div id="ranking" class="rank"></div>
+  <h3>최종 결과</h3><div id="ranking" class="rank"></div>
 </section>
 
 <section class="card"><h2>정산 정책 메모</h2><ul><li>플레이어별 상한은 라운드 정산과 보너스 정산을 합산한 금액에 적용합니다.</li><li>포인트 멀리건·포인트 배판 비용은 상한 적용 후 별도로 차감하며, 배틀컵은 최종 1위에게 별도로 지급합니다.</li><li>동타 배판과 스코어 배판 조건을 동시에 충족하면 동타 배판만 우선 적용합니다.</li><li>1게임 상한값이 0이면 상한을 적용하지 않습니다.</li></ul></section>
@@ -116,7 +126,7 @@ button,.btns button{min-height:42px!important;padding:9px 16px!important;border:
 const pars=[4,4,3,5,4,4,3,5,4,4,4,3,5,4,4,3,5,4];
 const presets={wide:[[2,5,6,7],[2,4,5,6],[2,3,4,5],[3,5,6,7],[2,4,5,6],[2,5,5,6],[2,3,4,5],[3,5,6,7],[2,4,5,6],[2,4,5,6],[2,5,6,7],[2,3,4,5],[3,5,6,7],[2,5,5,6],[2,4,5,6],[2,3,4,5],[3,5,6,7],[2,5,5,6]],close:[[4,4,5,5],[4,5,4,5],[3,3,4,4],[5,5,6,6],[4,4,4,5],[4,5,5,4],[3,4,3,4],[5,6,5,6],[4,4,5,4],[4,5,4,5],[4,4,5,5],[3,3,4,4],[5,5,6,6],[4,5,4,5],[4,4,5,5],[3,4,3,4],[5,6,5,6],[4,4,5,4]]};
 let scores=JSON.parse(JSON.stringify(presets.wide)),pointUses=Array.from({length:18},()=>[false,false,false,false]);const fmt=n=>Math.round(n).toLocaleString('ko-KR')+'P';
-function renderInputs(){const body=document.getElementById('rounds');body.innerHTML=scores.map((s,i)=>{const event=i===3||i===16?'롱기':i===2||i===15?'니어':'-';return '<tr><td>'+(i+1)+'H</td><td>'+pars[i]+'</td><td><span class="pill '+(event!=='-'?'on':'')+'">'+event+'</span></td>'+s.map((v,p)=>'<td><input class="score" type="number" min="1" max="20" value="'+v+'" data-h="'+i+'" data-p="'+p+'"></td>').join('')+'<td>'+[0,1,2,3].map(p=>'<label class="check" style="display:inline-flex;margin-right:5px"><input class="point-use" type="checkbox" data-h="'+i+'" data-p="'+p+'" '+(pointUses[i][p]?'checked':'')+'>P'+(p+1)+'</label>').join('')+'</td><td class="tie"></td><td class="scoremul"></td><td class="mul"></td><td class="settle"></td><td class="settle"></td><td class="settle"></td><td class="settle"></td></tr>'}).join('');body.querySelectorAll('.score').forEach(el=>el.addEventListener('change',e=>{scores[+e.target.dataset.h][+e.target.dataset.p]=+e.target.value;calculate()}));body.querySelectorAll('.point-use').forEach(el=>el.addEventListener('change',e=>{const h=+e.target.dataset.h,p=+e.target.dataset.p,used=pointUses.reduce((n,r)=>n+(r[p]?1:0),0);if(e.target.checked&&used>=2){e.target.checked=false;alert('포인트 배판은 플레이어별 최대 2회까지 사용할 수 있습니다.')}pointUses[h][p]=e.target.checked;calculate()}));}
+function renderInputs(){const body=document.getElementById('rounds');body.innerHTML=scores.map((s,i)=>{const event=i===3||i===16?'롱기':i===2||i===15?'니어':'-';return '<tr><td>'+(i+1)+'H</td><td>'+pars[i]+'</td><td><span class="pill '+(event!=='-'?'on':'')+'">'+event+'</span></td>'+s.map((v,p)=>'<td><input class="score" type="number" min="1" max="20" value="'+v+'" data-h="'+i+'" data-p="'+p+'"></td>').join('')+'<td>'+[0,1,2,3].map(p=>'<label class="point-check"><input class="point-use" type="checkbox" data-h="'+i+'" data-p="'+p+'" '+(pointUses[i][p]?'checked':'')+'>P'+(p+1)+'</label>').join('')+'</td><td class="tie"></td><td class="scoremul"></td><td class="mul"></td><td class="settle"></td><td class="settle"></td><td class="settle"></td><td class="settle"></td></tr>'}).join('');body.querySelectorAll('.score').forEach(el=>el.addEventListener('change',e=>{scores[+e.target.dataset.h][+e.target.dataset.p]=+e.target.value;calculate()}));body.querySelectorAll('.point-use').forEach(el=>el.addEventListener('change',e=>{const h=+e.target.dataset.h,p=+e.target.dataset.p,used=pointUses.reduce((n,r)=>n+(r[p]?1:0),0);if(e.target.checked&&used>=2){e.target.checked=false;alert('포인트 배판은 플레이어별 최대 2회까지 사용할 수 있습니다.')}pointUses[h][p]=e.target.checked;calculate()}));}
 function scoreEvent(row,par){let eagles=0,birdies=0;row.forEach(v=>{const d=v-par;if(d<=-2)eagles++;else if(d===-1)birdies++});return eagles>=1||birdies>=2}
 function applyCap(raw,cap){if(!cap)return raw.slice();let out=raw.map(v=>Math.max(-cap,Math.min(cap,v)));for(let k=0;k<20;k++){const sum=out.reduce((a,b)=>a+b,0);if(Math.abs(sum)<1)return out;const idx=out.map((v,i)=>({v,i})).filter(x=>sum>0?x.v>-cap:x.v<cap);if(!idx.length)break;const share=sum/idx.length;idx.forEach(x=>out[x.i]-=share)}return out}
 function calculate(){document.querySelectorAll('#rounds .score').forEach(el=>scores[+el.dataset.h][+el.dataset.p]=+el.value);const unit=+document.getElementById('unit').value||0,max=+document.getElementById('maxMul').value||6,cap=+document.getElementById('cap').value||0,cupBase=+document.getElementById('cupBase').value||0,itemCost=+document.getElementById('itemCost').value||0,longUnit=+document.getElementById('longUnit').value||0,nearUnit=+document.getElementById('nearUnit').value||0,birdieUnit=+document.getElementById('birdieUnit').value||0,tieOn=document.getElementById('tieRule').checked,limit=document.getElementById('limitRule').checked,scoreOn=document.getElementById('scoreRule').value==='on',mulligans=[...document.querySelectorAll('.mulligan')].map(x=>Math.max(0,+x.value||0)),longWinners=[...document.querySelectorAll('.long-winner')].map(x=>+x.value),nearWinners=[...document.querySelectorAll('.near-winner')].map(x=>+x.value),longCounts=[0,1,2,3].map(p=>longWinners.filter(v=>v===p).length),nearCounts=[0,1,2,3].map(p=>nearWinners.filter(v=>v===p).length);let pendingTie=0,pendingScore=0,peak=1,tieCount=0,scoreCount=0,tot=[0,0,0,0],baseTot=[0,0,0,0];const rows=[...document.querySelectorAll('#rounds tr')];
