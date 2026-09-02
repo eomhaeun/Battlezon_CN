@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>개인전 · 라스베가스 8421</title>
+<style>:root{--g:#08783e;--gd:#07552f;--bg:#f3f6f4;--line:#dce5df;--muted:#68756e;--pos:#08783e;--neg:#c73737}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#17211b;font:14px Pretendard,"Noto Sans KR",system-ui,sans-serif}main{width:min(1200px,calc(100% - 40px));margin:auto;padding:20px 0 48px}nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}nav a{padding:9px 13px;border:1px solid var(--line);border-radius:20px;background:#fff;color:#294237;text-decoration:none}.active{background:var(--g)!important;color:#fff!important}h1{margin:12px 0 4px;font-size:30px}.sub,.hint{color:var(--muted)}.formula{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.formula div{padding:15px;border:1px solid #d6e8dd;border-radius:12px;background:#f7fbf8}.formula b{display:block;color:var(--gd);margin-bottom:4px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 4px 18px #153d2410}.card h2{margin:0 0 16px;padding-left:12px;border-left:4px solid var(--g);font-size:20px}.grid{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:12px}.use-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}label{display:block;font-weight:700}input,select{width:100%;height:38px;margin-top:5px;padding:7px 9px;border:1px solid #cbd7cf;border-radius:8px;background:#fff}.scroll{overflow-x:auto}table{width:100%;min-width:980px;border-collapse:collapse;white-space:nowrap}th,td{padding:8px 7px;border-bottom:1px solid #e6ece8;text-align:center}th{background:#f7faf8;color:#425249}.score{width:58px;text-align:center}.map{width:58px;text-align:center}.check{width:auto;height:auto;margin:0}.a{color:#b33a32;font-weight:800}.b{color:#2563b8;font-weight:800}.pos{color:var(--pos);font-weight:800}.neg{color:var(--neg);font-weight:800}.draw{color:#77827c}.maps table{min-width:850px}.summary{min-width:900px}@media(max-width:900px){.grid{grid-template-columns:repeat(3,minmax(150px,1fr));min-width:700px}.settings{overflow:auto}.use-grid,.formula{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){main{width:calc(100% - 24px)}.use-grid,.formula{grid-template-columns:1fr}h1{font-size:25px}}</style>
+<style>tbody tr.hot td{background:#fff4cf}</style>
+</head>
+<body>
+<main>
+<style>.top-nav{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 auto 18px;max-width:1280px}.top-nav .nav-group{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.top-nav .nav-label{font-size:12px;font-weight:800;color:#68756e;margin-right:2px}.top-nav a{padding:8px 11px;border:1px solid var(--line);border-radius:20px;background:#fff;color:#294237;text-decoration:none;white-space:nowrap}.top-nav a.active{background:var(--green,#08783e)!important;color:#fff!important}.top-nav .home{font-weight:800}@media(max-width:650px){.top-nav{align-items:flex-start}.top-nav .nav-group{width:100%}}</style>
+<nav class="top-nav"><a class="home" href="index.html">홈</a><div class="nav-group"><span class="nav-label">스트로크</span><a href="stroke_normal.html">개인전 일반</a><a href="stroke_8421.html">개인전 8421</a><a href="team-stroke_normal.html">팀전 일반</a><a href="team-stroke_8421.html">팀전 8421</a></div><div class="nav-group"><span class="nav-label">라스베가스</span><a href="lasvegas_normal.html">개인전 일반</a><a class="active" href="lasvegas_8421.html">개인전 8421</a></div></nav>
+<h1>개인전 · 라스베가스 8421</h1>
+<p class="sub">4인 · 18홀 · 플레이어별 환산점수 및 자동 페어 편성 시뮬레이션</p>
+<div class="formula">
+<div>
+<b>페어(팀) 점수</b>페어에 소속된 2인의 8421 환산점수 합계</div>
+<div>
+<b>정산 포인트</b>양 페어의 환산점수 차이 × 100P × 적용 배수</div>
+</div>
+<section class="card">
+<h2>기본 설정</h2>
+<div class="settings">
+<div class="grid">
+<label>환산점수 차이당<input id="unit" type="number" value="100" min="0" step="100">
+</label>
+<label>1인 최대 획득/손실<input id="cap" type="number" value="10000" min="0" step="100">
+</label>
+<label>최대 배수<input id="maxMul" type="number" value="6" min="1">
+</label>
+<label>멀리건/배판 1회 비용<input id="cost" type="number" value="200" min="0" step="100">
+</label>
+<label>배틀컵 초기값<input id="cup" type="number" value="600" min="0" step="100">
+</label>
+<label>1홀 A팀 편성<select id="firstPair">
+<option value="0,3">P1 + P4</option>
+<option value="0,1">P1 + P2</option>
+<option value="0,2">P1 + P3</option>
+<option value="1,2">P2 + P3</option>
+<option value="1,3">P2 + P4</option>
+<option value="2,3">P3 + P4</option>
+</select>
+</label>
+</div>
+</div>
+</section>
+<section class="card">
+<h2>플레이어별 사용</h2>
+<div class="use-grid" id="uses">
+</div>
+</section>
+<section class="card maps">
+<h2>플레이어별 8421 환산점수 설정</h2>
+<p class="hint">각 플레이어에게 적용할 환산점수를 수정할 수 있습니다. 상위 스코어 등급의 점수는 바로 아래 등급보다 반드시 커야 합니다.</p>
+<div class="scroll">
+<table>
+<thead>
+<tr>
+<th>플레이어</th>
+<th>콘도르</th>
+<th>알바트로스</th>
+<th>이글</th>
+<th>버디</th>
+<th>파</th>
+<th>보기</th>
+<th>더블보기 이하</th>
+</tr>
+</thead>
+<tbody id="maps">
+</tbody>
+</table>
+</div>
+</section>
+<section class="card">
+<h2>홀별 스코어 입력</h2>
+<p class="hint">포인트 배판은 플레이어별 라운드당 최대 2회까지 사용할 수 있습니다.</p>
+<div class="scroll">
+<table>
+<thead>
+<tr>
+<th>홀</th>
+<th>기준 Par</th>
+<th>P1</th>
+<th>P2</th>
+<th>P3</th>
+<th>P4</th>
+<th>플레이어별 포인트 배판</th>
+<th>적용 배수</th>
+<th>P1 정산</th>
+<th>P2 정산</th>
+<th>P3 정산</th>
+<th>P4 정산</th>
+</tr>
+</thead>
+<tbody id="inputs">
+</tbody>
+</table>
+</div>
+</section>
+<section class="card">
+<h2>홀별 정산표</h2>
+<p class="hint">개인 환산점수와 페어 합계를 비교해 홀 정산 및 다음 홀 편성을 계산합니다. 페어 합계가 동점이면 다음 홀에 동타 배판이 +1배 누적됩니다.</p>
+<div class="scroll">
+<table>
+<thead>
+<tr>
+<th>홀</th>
+<th>A팀</th>
+<th>B팀</th>
+<th>P1</th>
+<th>P2</th>
+<th>P3</th>
+<th>P4</th>
+<th>A팀 합계</th>
+<th>B팀 합계</th>
+<th>점수 차이</th>
+<th>적용 배수</th>
+<th>홀 결과</th>
+<th>다음 홀 편성</th>
+</tr>
+</thead>
+<tbody id="settles">
+</tbody>
+</table>
+</div>
+</section>
+<section class="card">
+<h2>라운드 최종 결과</h2>
+<div class="scroll">
+<table class="summary">
+<thead>
+<tr>
+<th>플레이어</th>
+<th>상한 적용 전</th>
+<th>상한 적용 후</th>
+<th>상한 조정값</th>
+<th>사용 비용</th>
+<th>배틀컵</th>
+<th>최종 증감</th>
+</tr>
+</thead>
+<tbody id="result">
+</tbody>
+</table>
+</div>
+<p id="cupInfo" class="hint">
+</p>
+</section>
+<script>
+const P=['P1','P2','P3','P4'],pars=[4,4,3,5,4,4,3,5,4,4,4,3,5,4,4,3,5,4],cats=['콘도르','알바트로스','이글','버디','파','보기','더블보기 이하'],defaults=[30,20,12,8,4,2,1],$=id=>document.getElementById(id);
+P.forEach((p,i)=>$('uses').insertAdjacentHTML('beforeend',`<label>${p} 포인트 멀리건 사용 횟수<input id="m${i}" type="number" value="0" min="0">
+</label>`));
+P.forEach((p,i)=>$('maps').insertAdjacentHTML('beforeend',`<tr>
+<td>
+<b>${p}</b>
+</td>${defaults.map((v,c)=>`<td>
+<input class="map" id="map${i}_${c}" data-p="${i}" data-c="${c}" type="number" value="${v}" min="0" max="99">
+</td>`).join('')}</tr>`));
+pars.forEach((par,h)=>{$('inputs').insertAdjacentHTML('beforeend',`<tr>
+<td>${h+1}</td>
+<td>${par}</td>${P.map((p,i)=>`<td>
+<input class="score" id="s${h}_${i}" value="${i===0?(par===3?par-1:par-2):par}" type="number" min="1" max="${par*2}">
+</td>`).join('')}<td>${P.map((p,i)=>`<label style="display:inline-flex;align-items:center;gap:3px;margin:0 5px">
+<input class="check" id="bet${h}_${i}" type="checkbox">${p}</label>`).join('')}</td>
+<td id="mul${h}">×1</td>
+${P.map((_,i)=>`<td id="playerSettle${h}_${i}"></td>`).join('')}
+</tr>`);$('settles').insertAdjacentHTML('beforeend',`<tr id="settleRow${h}">
+<td>${h+1}</td>
+<td id="a${h}">
+</td>
+<td id="b${h}">
+</td>${P.map((_,i)=>`<td id="v${h}_${i}">
+</td>`).join('')}<td id="at${h}">
+</td>
+<td id="bt${h}">
+</td>
+<td id="diff${h}">
+</td>
+<td id="settleMul${h}">
+</td>
+<td id="win${h}">
+</td>
+<td id="next${h}">
+</td>
+</tr>`)});
+function pairNames(a){return a.map(i=>P[i]).join('·')}function other(a){return[0,1,2,3].filter(i=>!a.includes(i))}function converted(p,s,par){const d=s-par,c=d<=-4?0:d===-3?1:d===-2?2:d===-1?3:d===0?4:d===1?5:6;return +$(`map${p}_${c}`).value||0}function fmt(v){return`${v>0?'+':''}${v.toLocaleString()}P`}
+function rank(vals,prev){return[0,1,2,3].sort((x,y)=>vals[y]-vals[x]||prev.indexOf(x)-prev.indexOf(y))}
+function calc(){const unit=+$('unit').value||0,cap=+$('cap').value||0,max=Math.max(1,+$('maxMul').value||1),cost=+$('cost').value||0,cupBase=+$('cup').value||0;let pair=$('firstPair').value.split(',').map(Number),prev=[0,1,2,3],total=[0,0,0,0],bets=[0,0,0,0],pendingTie=0;
+for(let h=0;h<18;h++){const par=pars[h],scores=P.map((_,i)=>{const el=$(`s${h}_${i}`),v=Math.max(1,Math.min(par*2,+el.value||1));el.value=v;return v}),vals=scores.map((s,i)=>converted(i,s,par)),b=other(pair),uses=P.map((_,i)=>$(`bet${h}_${i}`).checked),mul=Math.min(max,1+pendingTie+uses.filter(Boolean).length);uses.forEach((x,i)=>{if(x)bets[i]++});const at=pair.reduce((n,i)=>n+vals[i],0),bt=b.reduce((n,i)=>n+vals[i],0),d=Math.abs(at-bt),point=d*unit*mul,w=at===bt?-1:at>bt?0:1,holeSettle=[0,0,0,0];pair.forEach(i=>{holeSettle[i]=w<0?0:w===0?point:-point;total[i]+=holeSettle[i]});b.forEach(i=>{holeSettle[i]=w<0?0:w===1?point:-point;total[i]+=holeSettle[i]});$(`mul${h}`).textContent=`×${mul}`;holeSettle.forEach((v,i)=>{$(`playerSettle${h}_${i}`).innerHTML=`<span class="${v>0?'pos':v<0?'neg':'draw'}">${fmt(v)}</span>`});$(`settleMul${h}`).innerHTML=`<b>×${mul}</b>`;$(`settleRow${h}`).classList.toggle('hot',mul>1);$(`a${h}`).innerHTML=`<span class="a">${pairNames(pair)}</span>`;$(`b${h}`).innerHTML=`<span class="b">${pairNames(b)}</span>`;vals.forEach((v,i)=>$(`v${h}_${i}`).textContent=v);$(`at${h}`).textContent=at;$(`bt${h}`).textContent=bt;$(`diff${h}`).textContent=d;$(`win${h}`).innerHTML=w<0?'<span class="draw">무승부 · 0P · 다음 홀 +1배</span>':`<span class="pos">${w?'B':'A'}팀 승 · ${fmt(point)}</span>`;if(h===17){$(`next${h}`).textContent='라운드 종료';continue}if(w>=0){pendingTie=0;prev=rank(vals,prev);pair=[prev[0],prev[3]]}else pendingTie=Math.min(max-1,pendingTie+1);$(`next${h}`).textContent=w<0?`${pairNames(pair)} 유지`:`${pairNames(pair)} / ${pairNames(other(pair))}`}
+const used=P.map((_,i)=>(+$(`m${i}`).value||0)+bets[i]),capped=total.map(v=>cap?Math.max(-cap,Math.min(cap,v)):v),best=Math.max(...capped),winners=capped.map((v,i)=>v===best?i:-1).filter(i=>i>=0),cupTotal=cupBase+used.reduce((a,b)=>a+b,0)*cost,share=cupTotal/winners.length;$('result').innerHTML=P.map((p,i)=>{const adj=capped[i]-total[i],fee=used[i]*cost,cup=winners.includes(i)?share:0,final=capped[i]-fee+cup;return`<tr>
+<td>
+<b>${p}</b>
+</td>
+<td>${fmt(total[i])}</td>
+<td>${fmt(capped[i])}</td>
+<td>${fmt(adj)}</td>
+<td class="neg">${fmt(-fee)}</td>
+<td class="pos">${fmt(cup)}</td>
+<td class="${final>=0?'pos':'neg'}">${fmt(final)}</td>
+</tr>`}).join('');$('cupInfo').textContent=`배틀컵 ${cupTotal.toLocaleString()}P · 획득자 ${winners.map(i=>P[i]).join(', ')}`}
+function validateMapInput(t){const p=+t.dataset.p,c=+t.dataset.c,upper=c===0?99:(+$(`map${p}_${c-1}`).value)-1,lower=c===6?0:(+$(`map${p}_${c+1}`).value)+1,raw=+t.value||0,valid=Math.max(lower,Math.min(upper,raw));if(raw!==valid){alert(`상위 스코어 등급의 환산점수는 바로 아래 등급보다 반드시 커야 합니다. 입력 가능한 범위: ${lower}~${upper}`);t.value=valid}return valid}
+function enforcePointBetLimit(t){if(!t.matches('input[id^="bet"]')||!t.checked)return true;const p=t.id.split('_')[1],count=document.querySelectorAll(`input[id^="bet"][id$="_${p}"]:checked`).length;if(count>2){t.checked=false;alert(`P${+p+1}의 포인트 배판은 라운드당 최대 2회까지 사용할 수 있습니다.`);return false}return true}
+document.addEventListener('input',e=>{enforcePointBetLimit(e.target);if(!e.target.classList.contains('map'))calc()});document.addEventListener('change',e=>{enforcePointBetLimit(e.target);if(e.target.classList.contains('map'))validateMapInput(e.target);calc()});calc();
+</script>
+</main>
+<style id="page-version-style">.page-version{width:min(1200px,calc(100% - 40px));margin:0 auto 28px;padding-top:14px;border-top:1px solid #dce5df;color:#7a8780;font-size:12px;text-align:right}</style><div class="page-version" id="page-version">최종 업데이트 · 2026.09.02 14:30 KST</div></body>
+</html>
