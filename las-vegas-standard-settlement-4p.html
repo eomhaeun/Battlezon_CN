@@ -37,7 +37,7 @@
 
   <section class="card"><h2>플레이어별 사용</h2><div class="pair-grid" id="uses"></div></section>
 
-  <section class="card"><h2>홀별 스코어 입력</h2><p class="hint">기준 Par와 플레이어별 스코어를 입력합니다. 포인트 배판은 사용 인원 1명당 해당 홀 배수가 1배 증가하며 최대 배수를 초과하지 않습니다.</p><div class="scroll"><table>
+  <section class="card"><h2>홀별 스코어 입력</h2><p class="hint">기준 Par와 플레이어별 스코어를 입력합니다. 포인트 배판은 사용 인원 1명당 해당 홀 배수가 1배 증가하며, 무승부 시 다음 홀에 동타 배판이 +1배 누적됩니다.</p><div class="scroll"><table>
     <thead><tr><th>홀</th><th>기준 Par</th><th>P1 스코어</th><th>P2 스코어</th><th>P3 스코어</th><th>P4 스코어</th><th>플레이어별 포인트 배판</th><th>적용 배수</th></tr></thead><tbody id="scoreInputs"></tbody>
   </table></div></section>
 
@@ -67,17 +67,17 @@ function vegasPoints(a,b){let av=a.bonus,bv=b.bonus;if(a.sum<b.sum)av++;else if(
 function names(pair){return pair.map(i=>players[i]).join('·')}
 function calculate(){
   const unit=+$('unit').value||0,cap=+$('cap').value||0,maxMul=Math.max(1,+$('maxMul').value||1),cost=+$('cost').value||0,cupBase=+$('cup').value||0;
-  let pair=$('firstPair').value.split(',').map(Number), rank=[0,1,2,3], total=[0,0,0,0], betsByPlayer=[0,0,0,0];
+  let pair=$('firstPair').value.split(',').map(Number), rank=[0,1,2,3], total=[0,0,0,0], betsByPlayer=[0,0,0,0], pendingTie=0;
   for(let h=0;h<18;h++){
-    const par=+$(`par${h}`).value||4,scores=players.map((_,i)=>+$(`s${h}_${i}`).value||par),other=complement(pair),pointUses=players.map((_,i)=>$(`bet${h}_${i}`).checked),pointCount=pointUses.filter(Boolean).length,mul=Math.min(maxMul,1+pointCount);
+    const par=+$(`par${h}`).value||4,scores=players.map((_,i)=>+$(`s${h}_${i}`).value||par),other=complement(pair),pointUses=players.map((_,i)=>$(`bet${h}_${i}`).checked),pointCount=pointUses.filter(Boolean).length,mul=Math.min(maxMul,1+pendingTie+pointCount);
     pointUses.forEach((used,i)=>{if(used)betsByPlayer[i]++});
     const aScore=teamScore(pair,scores,par),bScore=teamScore(other,scores,par),[av,bv]=vegasPoints(aScore,bScore),diff=Math.abs(av-bv)*unit*mul;
     pair.forEach(i=>total[i]+=av>bv?diff:av<bv?-diff:0);other.forEach(i=>total[i]+=bv>av?diff:bv<av?-diff:0);
     $(`mul${h}`).textContent=`×${mul}`;$(`a${h}`).innerHTML=`<span class="team-a">${names(pair)}</span>`;$(`b${h}`).innerHTML=`<span class="team-b">${names(other)}</span>`;
     $(`sum${h}`).textContent=`${aScore.sum} / ${bScore.sum}`;$(`best${h}`).textContent=`${aScore.best} / ${bScore.best}`;$(`worst${h}`).textContent=`${aScore.worst} / ${bScore.worst}`;$(`bonus${h}`).textContent=`${aScore.bonus} / ${bScore.bonus}`;$(`v${h}`).innerHTML=`<b>${av} / ${bv}</b>`;
-    $(`w${h}`).innerHTML=av===bv?'<span class="draw">무승부 · 0P</span>':av>bv?`<span class="pos">A팀 +${diff.toLocaleString()}P</span>`:`<span class="pos">B팀 +${diff.toLocaleString()}P</span>`;
+    $(`w${h}`).innerHTML=av===bv?'<span class="draw">무승부 · 0P · 다음 홀 +1배</span>':av>bv?`<span class="pos">A팀 +${diff.toLocaleString()}P</span>`:`<span class="pos">B팀 +${diff.toLocaleString()}P</span>`;
     if(h===17){$(`n${h}`).textContent='라운드 종료';continue}
-    if(av!==bv){rank=stableRank(scores,rank);pair=[rank[0],rank[3]]}
+    if(av!==bv){pendingTie=0;rank=stableRank(scores,rank);pair=[rank[0],rank[3]]}else pendingTie=Math.min(maxMul-1,pendingTie+1);
     $(`n${h}`).textContent=av===bv?`${names(pair)} 유지`:`${names(pair)} / ${names(complement(pair))}`;
   }
   const used=players.map((_,i)=>(+$(`m${i}`).value||0)+betsByPlayer[i]),cupTotal=cupBase+used.reduce((a,b)=>a+b,0)*cost,capped=total.map(v=>cap?Math.max(-cap,Math.min(cap,v)):v),best=Math.max(...capped),winners=capped.map((v,i)=>v===best?i:-1).filter(i=>i>=0),cupShare=winners.length?cupTotal/winners.length:0;
