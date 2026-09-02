@@ -32,13 +32,67 @@ button,.btns button{min-height:42px!important;padding:9px 16px!important;border:
 .point-check{display:inline-flex!important;align-items:center!important;gap:2px!important;margin:0 3px 0 0!important;padding:2px 3px!important;border:0!important;background:transparent!important;font-size:11px!important;line-height:1!important}
 .point-check:last-child{margin-right:0!important}.point-check input{width:14px!important;height:14px!important;min-height:14px!important;margin:0!important;padding:0!important}
 #rounds .pill,#holes .out,#holes .mul{white-space:nowrap!important}.table-wrap table,.scroll table{min-width:max-content!important}
+</style><style id="personal-8421-layout">
+.flow-layout{grid-template-columns:1fr!important}.flow-layout>.card{width:100%}.four-col{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.summary h3{padding-top:18px!important;margin-top:24px!important;border-top:1px solid var(--ui-line)!important}.summary h2+h3{border-top:0!important;margin-top:0!important;padding-top:0!important}
+@media(max-width:900px){.four-col{grid-template-columns:repeat(2,minmax(0,1fr))!important}}@media(max-width:600px){.four-col{grid-template-columns:1fr!important}}
 </style></head>
 <body><nav class="bz-nav" aria-label="시뮬레이터 이동"><a href="index.html">전체 메뉴</a><a href="stroke-standard-settlement-4p.html">개인 · 일반</a><a class="active" href="stroke-8421-settlement-4p.html">개인 · 8421</a><a href="team-stroke-standard-settlement-4p.html">팀 · 일반</a><a href="team-stroke-8421-settlement-4p.html">팀 · 8421</a></nav><header class="bz-hero"><h1>스트로크 8421 정산 시나리오</h1><p>4인 플레이 · 플레이어별 환산점수 차이 기반 정산 시뮬레이터</p></header>
-<main><div class="grid">
-<section class="card settings"><h2>정산 조건</h2><div class="form-grid"><div class="field"><label>8421 점수차이당 포인트</label><input id="unit" type="number" min="0" step="100" value="100"></div><div class="field"><label>개인전 최대 배수</label><input id="maxMul" type="number" min="1" value="6"></div><div class="field"><label>1인 최대 획득/손실</label><input id="cap" type="number" min="0" step="1000" value="10000"></div><div class="field"><label>배틀컵 초기값</label><input id="cupBase" type="number" min="0" step="100" value="600"></div><div class="field"><label>멀리건/배판 1회 비용</label><input id="featureCost" type="number" min="0" step="100" value="100"></div></div><h3>자동 배판</h3><label class="check"><input id="tieRule" type="checkbox" checked> 4인 전원 동타 시 다음 홀 +1배</label><label class="check"><input id="limitRule" type="checkbox" checked> 최대 배수 상한 적용</label><p class="hint">8421에서는 스코어 배판과 보너스 포인트를 제공하지 않습니다.</p><h3>포인트 멀리건 사용 횟수</h3><div class="form-grid"> <div class="field"><label>P1</label><input class="mulligan" type="number" min="0" value="0"></div><div class="field"><label>P2</label><input class="mulligan" type="number" min="0" value="0"></div><div class="field"><label>P3</label><input class="mulligan" type="number" min="0" value="0"></div><div class="field"><label>P4</label><input class="mulligan" type="number" min="0" value="0"></div></div><div class="btns"><button class="primary" id="calc">다시 계산</button><button id="reset">초기화</button></div></section>
-<section class="card summary"><h2>18홀 최종 결과</h2><div class="kpis"><div class="kpi"><span>최대 적용 배수</span><strong id="peak">1배</strong></div><div class="kpi"><span>동타 배판 발생</span><strong id="tieCount">0회</strong></div><div class="kpi"><span>최종 배틀컵</span><strong id="cupTotal">600P</strong></div><div class="kpi"><span>배틀컵 획득자</span><strong id="cupWinner">P1</strong></div></div><h3>상한 적용 전·후 비교</h3><div class="note">8421 라운드 정산에 상한을 적용한 뒤 포인트 멀리건·포인트 배판 비용을 별도 차감하고, 배틀컵은 1위에게 별도 지급합니다.</div><div class="table-wrap" style="margin-top:14px"><table style="min-width:780px"><thead><tr><th>플레이어</th><th>환산점수 합계</th><th>상한 미적용</th><th>상한 적용</th><th>조정값</th><th>멀리건·배판 차감</th></tr></thead><tbody id="summary"></tbody></table></div><h3>배틀컵 포함 최종 결과</h3><div id="ranking" class="rank"></div></section>
-<section class="card"><h2>플레이어별 8421 환산점수 설정</h2><div class="note">각 플레이어에게 적용할 스코어별 환산점수를 직접 수정할 수 있습니다. 높은 스코어 등급의 환산점수는 바로 아래 등급보다 반드시 커야 하며, 작거나 같게 설정할 수 없습니다.</div><div class="table-wrap" style="margin-top:14px"><table style="min-width:760px"><thead><tr><th>플레이어</th><th>콘도르</th><th>알바트로스</th><th>이글</th><th>버디</th><th>파</th><th>보기</th><th>더블보기 이하</th></tr></thead><tbody id="conversion"></tbody></table></div></section>
-<section class="card"><h2>홀별 입력 및 정산</h2><div class="note">개인별 실제 스코어를 해당 플레이어의 8421 환산점수로 변환한 뒤, 플레이어 간 환산점수 차이 × 100P × 적용 배수로 정산합니다. 포인트 배판은 플레이어별 최대 2회, 홀별 1회 사용할 수 있습니다.</div><div class="table-wrap" style="margin-top:14px"><table><thead><tr><th>홀</th><th>Par</th><th>P1 타수</th><th>P1 환산</th><th>P2 타수</th><th>P2 환산</th><th>P3 타수</th><th>P3 환산</th><th>P4 타수</th><th>P4 환산</th><th>포인트 배판</th><th>동타 배판</th><th>적용 배수</th><th>P1 정산</th><th>P2 정산</th><th>P3 정산</th><th>P4 정산</th></tr></thead><tbody id="rounds"></tbody></table></div></section>
+<main><div class="grid flow-layout">
+<section class="card settings">
+  <h2>기본 설정</h2>
+  <div class="form-grid">
+    <div class="field"><label>8421 점수차이당 포인트</label><input id="unit" type="number" min="0" step="100" value="100"></div>
+    <div class="field"><label>1인 최대 획득/손실</label><input id="cap" type="number" min="0" step="1000" value="10000"></div>
+    <div class="field"><label>최대 배수</label><input id="maxMul" type="number" min="1" value="6"></div>
+    <div class="field"><label>멀리건/배판 1회 비용</label><input id="featureCost" type="number" min="0" step="100" value="100"></div>
+    <div class="field"><label>배틀컵 초기값</label><input id="cupBase" type="number" min="0" step="100" value="600"></div>
+  </div>
+  <h3>배판 적용 조건</h3>
+  <div class="form-grid">
+    <label class="check"><input id="tieRule" type="checkbox" checked> 4인 전원 동타 시 다음 홀 +1배</label>
+    <label class="check"><input id="limitRule" type="checkbox" checked> 최대 배수 상한 적용</label>
+  </div>
+  <p class="hint">8421에서는 보너스 포인트와 스코어 배판을 제공하지 않습니다.</p>
+  <div class="btns"><button class="primary" id="calc">다시 계산</button><button id="reset">초기화</button></div>
+</section>
+
+<section class="card">
+  <h2>플레이어별 사용</h2>
+  <h3>포인트 멀리건 사용 횟수</h3>
+  <div class="form-grid four-col">
+    <div class="field"><label>P1</label><input class="mulligan" type="number" min="0" value="0"></div>
+    <div class="field"><label>P2</label><input class="mulligan" type="number" min="0" value="0"></div>
+    <div class="field"><label>P3</label><input class="mulligan" type="number" min="0" value="0"></div>
+    <div class="field"><label>P4</label><input class="mulligan" type="number" min="0" value="0"></div>
+  </div>
+  <p class="hint">포인트 배판은 아래 홀별 입력 영역에서 선택합니다. 플레이어별 최대 2회, 홀별 1회 사용할 수 있습니다.</p>
+</section>
+
+<section class="card">
+  <h2>홀별 입력 및 정산</h2>
+  <div class="note">실제 스코어를 플레이어별 8421 점수로 변환한 뒤, 환산점수 차이 × 기본 포인트 × 적용 배수로 정산합니다.</div>
+  <div class="table-wrap" style="margin-top:14px"><table><thead><tr><th>홀</th><th>Par</th><th>P1 타수</th><th>P1 환산</th><th>P2 타수</th><th>P2 환산</th><th>P3 타수</th><th>P3 환산</th><th>P4 타수</th><th>P4 환산</th><th>포인트 배판</th><th>동타 배판</th><th>적용 배수</th><th>P1 정산</th><th>P2 정산</th><th>P3 정산</th><th>P4 정산</th></tr></thead><tbody id="rounds"></tbody></table></div>
+</section>
+
+<section class="card">
+  <h2>플레이어별 8421 환산점수 설정</h2>
+  <div class="note">각 플레이어에게 적용할 환산점수를 수정할 수 있습니다. 상위 스코어 등급의 점수는 바로 아래 등급보다 반드시 커야 합니다.</div>
+  <div class="table-wrap" style="margin-top:14px"><table style="min-width:760px"><thead><tr><th>플레이어</th><th>콘도르</th><th>알바트로스</th><th>이글</th><th>버디</th><th>파</th><th>보기</th><th>더블보기 이하</th></tr></thead><tbody id="conversion"></tbody></table></div>
+</section>
+
+<section class="card summary">
+  <h2>라운드 최종 결과</h2>
+  <h3>8421 환산점수 및 배판 결과</h3>
+  <div class="kpis"><div class="kpi"><span>최대 적용 배수</span><strong id="peak">1배</strong></div><div class="kpi"><span>동타 배판 발생</span><strong id="tieCount">0회</strong></div></div>
+  <h3>상한 적용 비교</h3>
+  <div class="note">8421 라운드 정산에 상한을 적용한 뒤 포인트 멀리건·포인트 배판 비용을 별도로 차감합니다.</div>
+  <div class="table-wrap" style="margin-top:14px"><table style="min-width:780px"><thead><tr><th>플레이어</th><th>환산점수 합계</th><th>상한 미적용</th><th>상한 적용</th><th>조정값</th><th>멀리건·배판 차감</th></tr></thead><tbody id="summary"></tbody></table></div>
+  <h3>배틀컵 정산</h3>
+  <div class="kpis"><div class="kpi"><span>최종 배틀컵</span><strong id="cupTotal">600P</strong></div><div class="kpi"><span>배틀컵 획득자</span><strong id="cupWinner">P1</strong></div></div>
+  <h3>최종 결과</h3><div id="ranking" class="rank"></div>
+</section>
+
 <section class="card"><h2>정산 정책 메모</h2><ul><li>8421 점수차이당 기본 포인트는 100P입니다.</li><li>보너스 포인트와 스코어 배판은 제공하지 않습니다.</li><li>동타 배판은 4인 전원이 동일한 실제 스코어를 기록한 경우 다음 홀에 +1배 적용됩니다.</li><li>포인트 멀리건·포인트 배판 비용은 상한 적용 후 별도 차감되며 배틀컵에 누적됩니다.</li><li>1게임 상한이 0이면 상한을 적용하지 않습니다.</li></ul></section>
 </div><footer>Battlezon CN · 스트로크 8421 정책 검토용</footer></main>
 <script>
