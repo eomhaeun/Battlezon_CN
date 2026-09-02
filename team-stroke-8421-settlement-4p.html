@@ -94,9 +94,7 @@
 </td>`).join('')}</tr>`).join('');$('uses').innerHTML=[0,1,2,3].map(p=>`<label>P${p+1} 포인트 멀리건 횟수<input class="mull" type="number" min="0" value="0">
 </label>`).join('');$('holes').innerHTML=pars.map((par,h)=>`<tr>
 <td>${h+1}</td>
-<td>
-<input class="par" data-h="${h}" type="number" value="${par}" readonly>
-</td>${[0,1,2,3].map(p=>`<td>
+<td>${par}</td>${[0,1,2,3].map(p=>`<td>
 <input class="score" data-h="${h}" data-p="${p}" type="number" value="${scores[h][p]}" min="1" max="${par*2}">
 </td>`).join('')}<td>${[0,1,2,3].map(p=>`P${p+1}<input class="check point" data-h="${h}" data-p="${p}" type="checkbox">`).join(' ')}</td>
 <td class="mul">
