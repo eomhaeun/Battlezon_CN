@@ -38,7 +38,7 @@
   <section class="card"><h2>플레이어별 사용</h2><div class="pair-grid" id="uses"></div></section>
 
   <section class="card"><h2>홀별 스코어 입력</h2><p class="hint">기준 Par와 플레이어별 스코어를 입력합니다. 포인트 배판은 사용 인원 1명당 해당 홀 배수가 1배 증가하며, 무승부 시 다음 홀에 동타 배판이 +1배 누적됩니다.</p><div class="scroll"><table>
-    <thead><tr><th>홀</th><th>기준 Par</th><th>P1 스코어</th><th>P2 스코어</th><th>P3 스코어</th><th>P4 스코어</th><th>플레이어별 포인트 배판</th><th>적용 배수</th></tr></thead><tbody id="scoreInputs"></tbody>
+    <thead><tr><th>홀</th><th>기준 Par</th><th>P1 스코어</th><th>P2 스코어</th><th>P3 스코어</th><th>P4 스코어</th><th>플레이어별 포인트 배판</th><th>적용 배수</th><th>P1 정산</th><th>P2 정산</th><th>P3 정산</th><th>P4 정산</th></tr></thead><tbody id="scoreInputs"></tbody>
   </table></div></section>
 
   <section class="card"><h2>홀별 정산표</h2><p class="hint">각 항목은 A팀 / B팀 순서로 표시되며, 항목별 우세 팀에 1점을 부여합니다. 스코어 가산점은 팀별 달성 점수를 합산합니다.</p><div class="scroll"><table>
@@ -56,7 +56,7 @@ const $=id=>document.getElementById(id);
 const uses=$('uses'), scoreInputs=$('scoreInputs'), settlements=$('settlements');
 players.forEach((p,i)=>uses.insertAdjacentHTML('beforeend',`<label>${p} 포인트 멀리건 사용 횟수<input id="m${i}" type="number" min="0" value="0"></label>`));
 defaultPars.forEach((par,h)=>{
-  scoreInputs.insertAdjacentHTML('beforeend',`<tr><td>${h+1}</td><td><input class="score" id="par${h}" type="number" value="${par}" readonly></td>${players.map((p,i)=>`<td><input class="score" id="s${h}_${i}" type="number" min="1" max="${par*2}" value="${i===0?(par===3?par-1:par-2):par}"></td>`).join('')}<td>${players.map((p,i)=>`<label style="display:inline-flex;align-items:center;gap:3px;margin:0 5px"><input class="check" id="bet${h}_${i}" type="checkbox">${p}</label>`).join('')}</td><td id="mul${h}">×1</td></tr>`);
+  scoreInputs.insertAdjacentHTML('beforeend',`<tr><td>${h+1}</td><td><input class="score" id="par${h}" type="number" value="${par}" readonly></td>${players.map((p,i)=>`<td><input class="score" id="s${h}_${i}" type="number" min="1" max="${par*2}" value="${i===0?(par===3?par-1:par-2):par}"></td>`).join('')}<td>${players.map((p,i)=>`<label style="display:inline-flex;align-items:center;gap:3px;margin:0 5px"><input class="check" id="bet${h}_${i}" type="checkbox">${p}</label>`).join('')}</td><td id="mul${h}">×1</td>${players.map((_,i)=>`<td id="playerSettle${h}_${i}"></td>`).join('')}</tr>`);
   settlements.insertAdjacentHTML('beforeend',`<tr id="settleRow${h}"><td>${h+1}</td><td id="a${h}"></td><td id="b${h}"></td><td id="sum${h}"></td><td id="best${h}"></td><td id="worst${h}"></td><td id="bonus${h}"></td><td id="v${h}"></td><td id="settleMul${h}"></td><td id="w${h}"></td><td id="n${h}"></td></tr>`);
 });
 function bonus(score,par){const d=score-par;return d<=-3?4:d===-2?2:d===-1?1:0}
@@ -72,8 +72,8 @@ function calculate(){
     const par=defaultPars[h],scores=players.map((_,i)=>{const el=$(`s${h}_${i}`),v=Math.max(1,Math.min(par*2,+el.value||1));el.value=v;return v}),other=complement(pair),pointUses=players.map((_,i)=>$(`bet${h}_${i}`).checked),pointCount=pointUses.filter(Boolean).length,mul=Math.min(maxMul,1+pendingTie+pointCount);
     pointUses.forEach((used,i)=>{if(used)betsByPlayer[i]++});
     const aScore=teamScore(pair,scores,par),bScore=teamScore(other,scores,par),[av,bv]=vegasPoints(aScore,bScore),diff=Math.abs(av-bv)*unit*mul;
-    pair.forEach(i=>total[i]+=av>bv?diff:av<bv?-diff:0);other.forEach(i=>total[i]+=bv>av?diff:bv<av?-diff:0);
-    $(`mul${h}`).textContent=`×${mul}`;$(`settleMul${h}`).innerHTML=`<b>×${mul}</b>`;$(`settleRow${h}`).classList.toggle('hot',mul>1);$(`a${h}`).innerHTML=`<span class="team-a">${names(pair)}</span>`;$(`b${h}`).innerHTML=`<span class="team-b">${names(other)}</span>`;
+    const holeSettle=[0,0,0,0];pair.forEach(i=>{holeSettle[i]=av>bv?diff:av<bv?-diff:0;total[i]+=holeSettle[i]});other.forEach(i=>{holeSettle[i]=bv>av?diff:bv<av?-diff:0;total[i]+=holeSettle[i]});
+    $(`mul${h}`).textContent=`×${mul}`;holeSettle.forEach((v,i)=>{$(`playerSettle${h}_${i}`).innerHTML=`<span class="${v>0?'pos':v<0?'neg':'draw'}">${fmt(v)}</span>`});$(`settleMul${h}`).innerHTML=`<b>×${mul}</b>`;$(`settleRow${h}`).classList.toggle('hot',mul>1);$(`a${h}`).innerHTML=`<span class="team-a">${names(pair)}</span>`;$(`b${h}`).innerHTML=`<span class="team-b">${names(other)}</span>`;
     $(`sum${h}`).textContent=`${aScore.sum} / ${bScore.sum}`;$(`best${h}`).textContent=`${aScore.best} / ${bScore.best}`;$(`worst${h}`).textContent=`${aScore.worst} / ${bScore.worst}`;$(`bonus${h}`).textContent=`${aScore.bonus} / ${bScore.bonus}`;$(`v${h}`).innerHTML=`<b>${av} / ${bv}</b>`;
     $(`w${h}`).innerHTML=av===bv?'<span class="draw">무승부 · 0P · 다음 홀 +1배</span>':av>bv?`<span class="pos">A팀 +${diff.toLocaleString()}P</span>`:`<span class="pos">B팀 +${diff.toLocaleString()}P</span>`;
     if(h===17){$(`n${h}`).textContent='라운드 종료';continue}
