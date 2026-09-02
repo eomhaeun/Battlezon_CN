@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>개인전 · 라스베가스 8421</title>
 <style>:root{--g:#08783e;--gd:#07552f;--bg:#f3f6f4;--line:#dce5df;--muted:#68756e;--pos:#08783e;--neg:#c73737}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#17211b;font:14px Pretendard,"Noto Sans KR",system-ui,sans-serif}main{width:min(1200px,calc(100% - 40px));margin:auto;padding:20px 0 48px}nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}nav a{padding:9px 13px;border:1px solid var(--line);border-radius:20px;background:#fff;color:#294237;text-decoration:none}.active{background:var(--g)!important;color:#fff!important}h1{margin:12px 0 4px;font-size:30px}.sub,.hint{color:var(--muted)}.formula{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}.formula div{padding:15px;border:1px solid #d6e8dd;border-radius:12px;background:#f7fbf8}.formula b{display:block;color:var(--gd);margin-bottom:4px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 4px 18px #153d2410}.card h2{margin:0 0 16px;padding-left:12px;border-left:4px solid var(--g);font-size:20px}.grid{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:12px}.use-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}label{display:block;font-weight:700}input,select{width:100%;height:38px;margin-top:5px;padding:7px 9px;border:1px solid #cbd7cf;border-radius:8px;background:#fff}.scroll{overflow-x:auto}table{width:100%;min-width:980px;border-collapse:collapse;white-space:nowrap}th,td{padding:8px 7px;border-bottom:1px solid #e6ece8;text-align:center}th{background:#f7faf8;color:#425249}.score{width:58px;text-align:center}.map{width:58px;text-align:center}.check{width:auto;height:auto;margin:0}.a{color:#b33a32;font-weight:800}.b{color:#2563b8;font-weight:800}.pos{color:var(--pos);font-weight:800}.neg{color:var(--neg);font-weight:800}.draw{color:#77827c}.maps table{min-width:850px}.summary{min-width:900px}@media(max-width:900px){.grid{grid-template-columns:repeat(3,minmax(150px,1fr));min-width:700px}.settings{overflow:auto}.use-grid,.formula{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){main{width:calc(100% - 24px)}.use-grid,.formula{grid-template-columns:1fr}h1{font-size:25px}}</style>
+<style>tbody tr.hot td{background:#fff4cf}</style>
 </head>
 <body>
 <main>
@@ -109,6 +110,7 @@
 <th>A팀 합계</th>
 <th>B팀 합계</th>
 <th>점수 차이</th>
+<th>적용 배수</th>
 <th>홀 결과</th>
 <th>다음 홀 편성</th>
 </tr>
@@ -159,7 +161,7 @@ pars.forEach((par,h)=>{$('inputs').insertAdjacentHTML('beforeend',`<tr>
 </td>`).join('')}<td>${P.map((p,i)=>`<label style="display:inline-flex;align-items:center;gap:3px;margin:0 5px">
 <input class="check" id="bet${h}_${i}" type="checkbox">${p}</label>`).join('')}</td>
 <td id="mul${h}">×1</td>
-</tr>`);$('settles').insertAdjacentHTML('beforeend',`<tr>
+</tr>`);$('settles').insertAdjacentHTML('beforeend',`<tr id="settleRow${h}">
 <td>${h+1}</td>
 <td id="a${h}">
 </td>
@@ -171,6 +173,8 @@ pars.forEach((par,h)=>{$('inputs').insertAdjacentHTML('beforeend',`<tr>
 </td>
 <td id="diff${h}">
 </td>
+<td id="settleMul${h}">
+</td>
 <td id="win${h}">
 </td>
 <td id="next${h}">
@@ -179,7 +183,7 @@ pars.forEach((par,h)=>{$('inputs').insertAdjacentHTML('beforeend',`<tr>
 function pairNames(a){return a.map(i=>P[i]).join('·')}function other(a){return[0,1,2,3].filter(i=>!a.includes(i))}function converted(p,s,par){const d=s-par,c=d<=-4?0:d===-3?1:d===-2?2:d===-1?3:d===0?4:d===1?5:6;return +$(`map${p}_${c}`).value||0}function fmt(v){return`${v>0?'+':''}${v.toLocaleString()}P`}
 function rank(vals,prev){return[0,1,2,3].sort((x,y)=>vals[y]-vals[x]||prev.indexOf(x)-prev.indexOf(y))}
 function calc(){const unit=+$('unit').value||0,cap=+$('cap').value||0,max=Math.max(1,+$('maxMul').value||1),cost=+$('cost').value||0,cupBase=+$('cup').value||0;let pair=$('firstPair').value.split(',').map(Number),prev=[0,1,2,3],total=[0,0,0,0],bets=[0,0,0,0],pendingTie=0;
-for(let h=0;h<18;h++){const par=+$(`par${h}`).value||4,scores=P.map((_,i)=>+$(`s${h}_${i}`).value||par),vals=scores.map((s,i)=>converted(i,s,par)),b=other(pair),uses=P.map((_,i)=>$(`bet${h}_${i}`).checked),mul=Math.min(max,1+pendingTie+uses.filter(Boolean).length);uses.forEach((x,i)=>{if(x)bets[i]++});const at=pair.reduce((n,i)=>n+vals[i],0),bt=b.reduce((n,i)=>n+vals[i],0),d=Math.abs(at-bt),point=d*unit*mul,w=at===bt?-1:at>bt?0:1;pair.forEach(i=>total[i]+=w<0?0:w===0?point:-point);b.forEach(i=>total[i]+=w<0?0:w===1?point:-point);$(`mul${h}`).textContent=`×${mul}`;$(`a${h}`).innerHTML=`<span class="a">${pairNames(pair)}</span>`;$(`b${h}`).innerHTML=`<span class="b">${pairNames(b)}</span>`;vals.forEach((v,i)=>$(`v${h}_${i}`).textContent=v);$(`at${h}`).textContent=at;$(`bt${h}`).textContent=bt;$(`diff${h}`).textContent=d;$(`win${h}`).innerHTML=w<0?'<span class="draw">무승부 · 0P · 다음 홀 +1배</span>':`<span class="pos">${w?'B':'A'}팀 승 · ${fmt(point)}</span>`;if(h===17){$(`next${h}`).textContent='라운드 종료';continue}if(w>=0){pendingTie=0;prev=rank(vals,prev);pair=[prev[0],prev[3]]}else pendingTie=Math.min(max-1,pendingTie+1);$(`next${h}`).textContent=w<0?`${pairNames(pair)} 유지`:`${pairNames(pair)} / ${pairNames(other(pair))}`}
+for(let h=0;h<18;h++){const par=+$(`par${h}`).value||4,scores=P.map((_,i)=>+$(`s${h}_${i}`).value||par),vals=scores.map((s,i)=>converted(i,s,par)),b=other(pair),uses=P.map((_,i)=>$(`bet${h}_${i}`).checked),mul=Math.min(max,1+pendingTie+uses.filter(Boolean).length);uses.forEach((x,i)=>{if(x)bets[i]++});const at=pair.reduce((n,i)=>n+vals[i],0),bt=b.reduce((n,i)=>n+vals[i],0),d=Math.abs(at-bt),point=d*unit*mul,w=at===bt?-1:at>bt?0:1;pair.forEach(i=>total[i]+=w<0?0:w===0?point:-point);b.forEach(i=>total[i]+=w<0?0:w===1?point:-point);$(`mul${h}`).textContent=`×${mul}`;$(`settleMul${h}`).innerHTML=`<b>×${mul}</b>`;$(`settleRow${h}`).classList.toggle('hot',mul>1);$(`a${h}`).innerHTML=`<span class="a">${pairNames(pair)}</span>`;$(`b${h}`).innerHTML=`<span class="b">${pairNames(b)}</span>`;vals.forEach((v,i)=>$(`v${h}_${i}`).textContent=v);$(`at${h}`).textContent=at;$(`bt${h}`).textContent=bt;$(`diff${h}`).textContent=d;$(`win${h}`).innerHTML=w<0?'<span class="draw">무승부 · 0P · 다음 홀 +1배</span>':`<span class="pos">${w?'B':'A'}팀 승 · ${fmt(point)}</span>`;if(h===17){$(`next${h}`).textContent='라운드 종료';continue}if(w>=0){pendingTie=0;prev=rank(vals,prev);pair=[prev[0],prev[3]]}else pendingTie=Math.min(max-1,pendingTie+1);$(`next${h}`).textContent=w<0?`${pairNames(pair)} 유지`:`${pairNames(pair)} / ${pairNames(other(pair))}`}
 const used=P.map((_,i)=>(+$(`m${i}`).value||0)+bets[i]),capped=total.map(v=>cap?Math.max(-cap,Math.min(cap,v)):v),best=Math.max(...capped),winners=capped.map((v,i)=>v===best?i:-1).filter(i=>i>=0),cupTotal=cupBase+used.reduce((a,b)=>a+b,0)*cost,share=cupTotal/winners.length;$('result').innerHTML=P.map((p,i)=>{const adj=capped[i]-total[i],fee=used[i]*cost,cup=winners.includes(i)?share:0,final=capped[i]-fee+cup;return`<tr>
 <td>
 <b>${p}</b>
