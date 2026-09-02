@@ -78,6 +78,10 @@ body{background:#f2f5f3!important}
 .rank-card{background:#f8fbf9!important}
 @media(max-width:900px){.flow-layout>.card{padding:22px 20px!important}.settings>.basic-settings-grid{gap:12px!important}.four-col{gap:12px!important}}
 @media(max-width:600px){.flow-layout>.card{padding:20px 16px!important;border-radius:14px!important}.card h2{font-size:21px!important}.card h2:before{height:23px!important}.field input,.field select{height:52px!important}}
+</style><style id="mulligan-input-row">
+.mulligan-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;width:100%!important;max-width:none!important;gap:20px!important}.mulligan-grid>.field{width:100%!important;min-width:0!important}
+@media(max-width:900px){.mulligan-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}}
+@media(max-width:600px){.mulligan-grid{grid-template-columns:1fr!important}}
 </style></head>
 <body><nav class="bz-nav" aria-label="시뮬레이터 이동"><a href="index.html">전체 메뉴</a><a class="active" href="stroke-standard-settlement-4p.html">개인 · 일반</a><a href="stroke-8421-settlement-4p.html">개인 · 8421</a><a href="team-stroke-standard-settlement-4p.html">팀 · 일반</a><a href="team-stroke-8421-settlement-4p.html">팀 · 8421</a></nav>
 <header class="bz-hero"><h1>개인전 · 스트로크 일반</h1><p>4인 플레이 · 18홀 타수 차 기반 개인 간 정산 시뮬레이터</p></header>
@@ -99,7 +103,7 @@ body{background:#f2f5f3!important}
 <section class="card">
   <h2>플레이어별 사용</h2>
   <h3>포인트 멀리건 사용 횟수</h3>
-  <div class="form-grid four-col">
+  <div class="form-grid four-col mulligan-grid">
     <div class="field"><label>P1</label><input class="mulligan" data-p="0" type="number" min="0" value="0"></div>
     <div class="field"><label>P2</label><input class="mulligan" data-p="1" type="number" min="0" value="0"></div>
     <div class="field"><label>P3</label><input class="mulligan" data-p="2" type="number" min="0" value="0"></div>
