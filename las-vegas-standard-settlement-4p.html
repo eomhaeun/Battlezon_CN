@@ -27,7 +27,7 @@
 
   <section class="card"><h2>기본 설정</h2><div class="settings-scroll"><div class="grid">
     <label>항목점수당 포인트<input id="unit" type="number" min="0" step="100" value="100"></label>
-    <label>1인 최대 획득/손실<input id="cap" type="number" min="0" step="100" value="3000"></label>
+    <label>1인 최대 획득/손실<input id="cap" type="number" min="0" step="100" value="10000"></label>
     <label>최대 배수<input id="maxMul" type="number" min="1" max="99" value="6"></label>
     <label>멀리건/배판 1회 비용<input id="cost" type="number" min="0" step="100" value="200"></label>
     <label>배틀컵 초기값<input id="cup" type="number" min="0" step="100" value="600"></label>
@@ -44,7 +44,7 @@
     <thead><tr><th>홀</th><th>A팀</th><th>B팀</th><th>팀 합산</th><th>최고 대결</th><th>최하 대결</th><th>스코어 가산점</th><th>팀 점수</th><th>홀 결과</th><th>다음 홀 편성</th></tr></thead><tbody id="settlements"></tbody>
   </table></div></section>
 
-  <section class="card"><h2>라운드 최종 결과</h2><div class="scroll"><table class="summary-table"><thead><tr><th>플레이어</th><th>홀 정산</th><th>상한 적용</th><th>사용 비용</th><th>배틀컵</th><th>최종 증감</th></tr></thead><tbody id="result"></tbody></table></div><p id="cupInfo" class="hint"></p></section>
+  <section class="card"><h2>라운드 최종 결과</h2><div class="scroll"><table class="summary-table"><thead><tr><th>플레이어</th><th>홀 정산</th><th>상한 적용</th><th>상한 조정값</th><th>사용 비용</th><th>배틀컵</th><th>최종 증감</th></tr></thead><tbody id="result"></tbody></table></div><p id="cupInfo" class="hint"></p></section>
 
   <section class="card"><h2>정산 정책 메모</h2><div class="policy"><div><b>홀별 승패</b>짝 합산·최고·최하 대결과 스코어 가산의 합계가 높은 페어가 승리합니다.</div><div><b>다음 홀 편성</b>무승부는 현재 페어 유지, 승부 발생 시 개인 스코어 순으로 1위+4위 / 2위+3위를 편성합니다.</div><div><b>마지막 홀</b>18홀 종료 후에는 다음 홀 팀을 계산하지 않습니다.</div></div></section>
 
@@ -80,7 +80,7 @@ function calculate(){
     $(`n${h}`).textContent=av===bv?`${names(pair)} 유지`:`${names(pair)} / ${names(complement(pair))}`;
   }
   const used=players.map((_,i)=>(+$(`m${i}`).value||0)+betsByPlayer[i]),cupTotal=cupBase+used.reduce((a,b)=>a+b,0)*cost,capped=total.map(v=>cap?Math.max(-cap,Math.min(cap,v)):v),best=Math.max(...capped),winners=capped.map((v,i)=>v===best?i:-1).filter(i=>i>=0),cupShare=winners.length?cupTotal/winners.length:0;
-  $('result').innerHTML=players.map((p,i)=>{const fee=used[i]*cost,cup=winners.includes(i)?cupShare:0,final=capped[i]-fee+cup;return`<tr><td><b>${p}</b></td><td class="${total[i]>=0?'pos':'neg'}">${fmt(total[i])}</td><td class="${capped[i]>=0?'pos':'neg'}">${fmt(capped[i])}</td><td class="neg">${fee?'-'+fee.toLocaleString()+'P':'0P'}</td><td class="pos">${cup?'+'+cup.toLocaleString()+'P':'0P'}</td><td class="${final>=0?'pos':'neg'}">${fmt(final)}</td></tr>`}).join('');
+  $('result').innerHTML=players.map((p,i)=>{const adjustment=capped[i]-total[i],fee=used[i]*cost,cup=winners.includes(i)?cupShare:0,final=capped[i]-fee+cup;return`<tr><td><b>${p}</b></td><td class="${total[i]>=0?'pos':'neg'}">${fmt(total[i])}</td><td class="${capped[i]>=0?'pos':'neg'}">${fmt(capped[i])}</td><td class="${adjustment>0?'pos':adjustment<0?'neg':'draw'}">${fmt(adjustment)}</td><td class="neg">${fee?'-'+fee.toLocaleString()+'P':'0P'}</td><td class="pos">${cup?'+'+cup.toLocaleString()+'P':'0P'}</td><td class="${final>=0?'pos':'neg'}">${fmt(final)}</td></tr>`}).join('');
   $('cupInfo').textContent=`배틀컵 ${cupTotal.toLocaleString()}P · 획득자 ${winners.map(i=>players[i]).join(', ')}${winners.length>1?' (균등 분배)':''}`;
 }
 function fmt(v){return`${v>0?'+':''}${v.toLocaleString()}P`}
