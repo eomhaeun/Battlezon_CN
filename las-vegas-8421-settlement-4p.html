@@ -52,7 +52,7 @@
 </section>
 <section class="card maps">
 <h2>플레이어별 8421 환산점수 설정</h2>
-<p class="hint">점수는 0~99 범위에서 수정할 수 있습니다.</p>
+<p class="hint">각 플레이어에게 적용할 환산점수를 수정할 수 있습니다. 상위 스코어 등급의 점수는 바로 아래 등급보다 반드시 커야 합니다.</p>
 <div class="scroll">
 <table>
 <thead>
@@ -86,6 +86,10 @@
 <th>P4</th>
 <th>플레이어별 포인트 배판</th>
 <th>적용 배수</th>
+<th>P1 정산</th>
+<th>P2 정산</th>
+<th>P3 정산</th>
+<th>P4 정산</th>
 </tr>
 </thead>
 <tbody id="inputs">
@@ -150,7 +154,7 @@ P.forEach((p,i)=>$('maps').insertAdjacentHTML('beforeend',`<tr>
 <td>
 <b>${p}</b>
 </td>${defaults.map((v,c)=>`<td>
-<input class="map" id="map${i}_${c}" type="number" value="${v}" min="0" max="99">
+<input class="map" id="map${i}_${c}" data-p="${i}" data-c="${c}" type="number" value="${v}" min="0" max="99">
 </td>`).join('')}</tr>`));
 pars.forEach((par,h)=>{$('inputs').insertAdjacentHTML('beforeend',`<tr>
 <td>${h+1}</td>
@@ -161,6 +165,7 @@ pars.forEach((par,h)=>{$('inputs').insertAdjacentHTML('beforeend',`<tr>
 </td>`).join('')}<td>${P.map((p,i)=>`<label style="display:inline-flex;align-items:center;gap:3px;margin:0 5px">
 <input class="check" id="bet${h}_${i}" type="checkbox">${p}</label>`).join('')}</td>
 <td id="mul${h}">×1</td>
+${P.map((_,i)=>`<td id="playerSettle${h}_${i}"></td>`).join('')}
 </tr>`);$('settles').insertAdjacentHTML('beforeend',`<tr id="settleRow${h}">
 <td>${h+1}</td>
 <td id="a${h}">
@@ -183,7 +188,7 @@ pars.forEach((par,h)=>{$('inputs').insertAdjacentHTML('beforeend',`<tr>
 function pairNames(a){return a.map(i=>P[i]).join('·')}function other(a){return[0,1,2,3].filter(i=>!a.includes(i))}function converted(p,s,par){const d=s-par,c=d<=-4?0:d===-3?1:d===-2?2:d===-1?3:d===0?4:d===1?5:6;return +$(`map${p}_${c}`).value||0}function fmt(v){return`${v>0?'+':''}${v.toLocaleString()}P`}
 function rank(vals,prev){return[0,1,2,3].sort((x,y)=>vals[y]-vals[x]||prev.indexOf(x)-prev.indexOf(y))}
 function calc(){const unit=+$('unit').value||0,cap=+$('cap').value||0,max=Math.max(1,+$('maxMul').value||1),cost=+$('cost').value||0,cupBase=+$('cup').value||0;let pair=$('firstPair').value.split(',').map(Number),prev=[0,1,2,3],total=[0,0,0,0],bets=[0,0,0,0],pendingTie=0;
-for(let h=0;h<18;h++){const par=pars[h],scores=P.map((_,i)=>{const el=$(`s${h}_${i}`),v=Math.max(1,Math.min(par*2,+el.value||1));el.value=v;return v}),vals=scores.map((s,i)=>converted(i,s,par)),b=other(pair),uses=P.map((_,i)=>$(`bet${h}_${i}`).checked),mul=Math.min(max,1+pendingTie+uses.filter(Boolean).length);uses.forEach((x,i)=>{if(x)bets[i]++});const at=pair.reduce((n,i)=>n+vals[i],0),bt=b.reduce((n,i)=>n+vals[i],0),d=Math.abs(at-bt),point=d*unit*mul,w=at===bt?-1:at>bt?0:1;pair.forEach(i=>total[i]+=w<0?0:w===0?point:-point);b.forEach(i=>total[i]+=w<0?0:w===1?point:-point);$(`mul${h}`).textContent=`×${mul}`;$(`settleMul${h}`).innerHTML=`<b>×${mul}</b>`;$(`settleRow${h}`).classList.toggle('hot',mul>1);$(`a${h}`).innerHTML=`<span class="a">${pairNames(pair)}</span>`;$(`b${h}`).innerHTML=`<span class="b">${pairNames(b)}</span>`;vals.forEach((v,i)=>$(`v${h}_${i}`).textContent=v);$(`at${h}`).textContent=at;$(`bt${h}`).textContent=bt;$(`diff${h}`).textContent=d;$(`win${h}`).innerHTML=w<0?'<span class="draw">무승부 · 0P · 다음 홀 +1배</span>':`<span class="pos">${w?'B':'A'}팀 승 · ${fmt(point)}</span>`;if(h===17){$(`next${h}`).textContent='라운드 종료';continue}if(w>=0){pendingTie=0;prev=rank(vals,prev);pair=[prev[0],prev[3]]}else pendingTie=Math.min(max-1,pendingTie+1);$(`next${h}`).textContent=w<0?`${pairNames(pair)} 유지`:`${pairNames(pair)} / ${pairNames(other(pair))}`}
+for(let h=0;h<18;h++){const par=pars[h],scores=P.map((_,i)=>{const el=$(`s${h}_${i}`),v=Math.max(1,Math.min(par*2,+el.value||1));el.value=v;return v}),vals=scores.map((s,i)=>converted(i,s,par)),b=other(pair),uses=P.map((_,i)=>$(`bet${h}_${i}`).checked),mul=Math.min(max,1+pendingTie+uses.filter(Boolean).length);uses.forEach((x,i)=>{if(x)bets[i]++});const at=pair.reduce((n,i)=>n+vals[i],0),bt=b.reduce((n,i)=>n+vals[i],0),d=Math.abs(at-bt),point=d*unit*mul,w=at===bt?-1:at>bt?0:1,holeSettle=[0,0,0,0];pair.forEach(i=>{holeSettle[i]=w<0?0:w===0?point:-point;total[i]+=holeSettle[i]});b.forEach(i=>{holeSettle[i]=w<0?0:w===1?point:-point;total[i]+=holeSettle[i]});$(`mul${h}`).textContent=`×${mul}`;holeSettle.forEach((v,i)=>{$(`playerSettle${h}_${i}`).innerHTML=`<span class="${v>0?'pos':v<0?'neg':'draw'}">${fmt(v)}</span>`});$(`settleMul${h}`).innerHTML=`<b>×${mul}</b>`;$(`settleRow${h}`).classList.toggle('hot',mul>1);$(`a${h}`).innerHTML=`<span class="a">${pairNames(pair)}</span>`;$(`b${h}`).innerHTML=`<span class="b">${pairNames(b)}</span>`;vals.forEach((v,i)=>$(`v${h}_${i}`).textContent=v);$(`at${h}`).textContent=at;$(`bt${h}`).textContent=bt;$(`diff${h}`).textContent=d;$(`win${h}`).innerHTML=w<0?'<span class="draw">무승부 · 0P · 다음 홀 +1배</span>':`<span class="pos">${w?'B':'A'}팀 승 · ${fmt(point)}</span>`;if(h===17){$(`next${h}`).textContent='라운드 종료';continue}if(w>=0){pendingTie=0;prev=rank(vals,prev);pair=[prev[0],prev[3]]}else pendingTie=Math.min(max-1,pendingTie+1);$(`next${h}`).textContent=w<0?`${pairNames(pair)} 유지`:`${pairNames(pair)} / ${pairNames(other(pair))}`}
 const used=P.map((_,i)=>(+$(`m${i}`).value||0)+bets[i]),capped=total.map(v=>cap?Math.max(-cap,Math.min(cap,v)):v),best=Math.max(...capped),winners=capped.map((v,i)=>v===best?i:-1).filter(i=>i>=0),cupTotal=cupBase+used.reduce((a,b)=>a+b,0)*cost,share=cupTotal/winners.length;$('result').innerHTML=P.map((p,i)=>{const adj=capped[i]-total[i],fee=used[i]*cost,cup=winners.includes(i)?share:0,final=capped[i]-fee+cup;return`<tr>
 <td>
 <b>${p}</b>
@@ -195,7 +200,8 @@ const used=P.map((_,i)=>(+$(`m${i}`).value||0)+bets[i]),capped=total.map(v=>cap?
 <td class="pos">${fmt(cup)}</td>
 <td class="${final>=0?'pos':'neg'}">${fmt(final)}</td>
 </tr>`}).join('');$('cupInfo').textContent=`배틀컵 ${cupTotal.toLocaleString()}P · 획득자 ${winners.map(i=>P[i]).join(', ')}`}
-document.addEventListener('input',calc);document.addEventListener('change',calc);calc();
+function validateMapInput(t){const p=+t.dataset.p,c=+t.dataset.c,upper=c===0?99:(+$(`map${p}_${c-1}`).value)-1,lower=c===6?0:(+$(`map${p}_${c+1}`).value)+1,raw=+t.value||0,valid=Math.max(lower,Math.min(upper,raw));if(raw!==valid){alert(`상위 스코어 등급의 환산점수는 바로 아래 등급보다 반드시 커야 합니다. 입력 가능한 범위: ${lower}~${upper}`);t.value=valid}return valid}
+document.addEventListener('input',e=>{if(!e.target.classList.contains('map'))calc()});document.addEventListener('change',e=>{if(e.target.classList.contains('map'))validateMapInput(e.target);calc()});calc();
 </script>
 </main>
 </body>
