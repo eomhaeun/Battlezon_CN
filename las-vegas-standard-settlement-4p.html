@@ -88,4 +88,4 @@ function fmt(v){return`${v>0?'+':''}${v.toLocaleString()}P`}
 function enforcePointBetLimit(t){if(!t.matches('input[id^="bet"]')||!t.checked)return true;const p=t.id.split('_')[1],count=document.querySelectorAll(`input[id^="bet"][id$="_${p}"]:checked`).length;if(count>2){t.checked=false;alert(`P${+p+1}의 포인트 배판은 라운드당 최대 2회까지 사용할 수 있습니다.`);return false}return true}
 document.addEventListener('input',e=>{enforcePointBetLimit(e.target);calculate()});document.addEventListener('change',e=>{enforcePointBetLimit(e.target);calculate()});calculate();
 </script>
-</main></body></html>
+</main><style id="page-version-style">.page-version{width:min(1200px,calc(100% - 40px));margin:0 auto 28px;padding-top:14px;border-top:1px solid #dce5df;color:#7a8780;font-size:12px;text-align:right}</style><div class="page-version" id="page-version">최종 업데이트 · 2026.09.02 14:23 KST</div></body></html>
