@@ -9,15 +9,21 @@
     *{box-sizing:border-box}body{margin:0;background:var(--bg);color:#17211b;font:14px Pretendard,"Noto Sans KR",system-ui,sans-serif}main{width:min(1200px,calc(100% - 40px));margin:auto;padding:20px 0 48px}
     nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}nav a{padding:9px 13px;border:1px solid var(--line);border-radius:20px;background:#fff;color:#294237;text-decoration:none}.active{background:var(--g)!important;color:#fff!important}
     h1{margin:12px 0 4px;font-size:30px}.sub,.hint{color:var(--muted)}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 4px 18px #153d2410}.card h2{margin:0 0 16px;padding-left:12px;border-left:4px solid var(--g);font-size:20px}
-    .grid{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:12px}.pair-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}label{display:block;font-weight:700}input,select{width:100%;height:38px;margin-top:5px;padding:7px 9px;border:1px solid #cbd7cf;border-radius:8px;background:#fff}.scroll{overflow-x:auto}table{width:100%;min-width:1160px;border-collapse:collapse;white-space:nowrap}th,td{padding:8px 7px;border-bottom:1px solid #e6ece8;text-align:center}th{background:#f7faf8;color:#425249}.score{width:58px;text-align:center}.check{width:auto;height:auto;margin:0}.team-a{color:#b33a32;font-weight:800}.team-b{color:#2563b8;font-weight:800}.pos{color:var(--pos);font-weight:800}.neg{color:var(--neg);font-weight:800}.draw{color:#77827c}.pill{display:inline-block;padding:4px 8px;border-radius:99px;background:var(--soft);color:var(--gd);font-weight:750}.summary-table{min-width:920px}.policy{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.policy div{padding:13px;border-radius:10px;background:#f7faf8;color:#435149}.policy b{display:block;color:#193b29;margin-bottom:4px}
-    @media(max-width:900px){.grid{grid-template-columns:repeat(3,minmax(150px,1fr));min-width:700px}.settings-scroll{overflow-x:auto}.pair-grid{grid-template-columns:repeat(2,1fr)}}
-    @media(max-width:600px){main{width:min(100% - 24px,1200px)}.pair-grid,.policy{grid-template-columns:1fr}h1{font-size:25px}}
+    .grid{display:grid;grid-template-columns:repeat(6,minmax(130px,1fr));gap:12px}.pair-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.score-guide{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0 4px}.score-guide div{padding:13px 14px;border:1px solid #d6e8dd;border-radius:11px;background:#f7fbf8;color:#435149}.score-guide b{display:block;margin-bottom:4px;color:var(--gd)}label{display:block;font-weight:700}input,select{width:100%;height:38px;margin-top:5px;padding:7px 9px;border:1px solid #cbd7cf;border-radius:8px;background:#fff}.scroll{overflow-x:auto}table{width:100%;min-width:1160px;border-collapse:collapse;white-space:nowrap}th,td{padding:8px 7px;border-bottom:1px solid #e6ece8;text-align:center}th{background:#f7faf8;color:#425249}.score{width:58px;text-align:center}.check{width:auto;height:auto;margin:0}.team-a{color:#b33a32;font-weight:800}.team-b{color:#2563b8;font-weight:800}.pos{color:var(--pos);font-weight:800}.neg{color:var(--neg);font-weight:800}.draw{color:#77827c}.pill{display:inline-block;padding:4px 8px;border-radius:99px;background:var(--soft);color:var(--gd);font-weight:750}.summary-table{min-width:920px}.policy{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.policy div{padding:13px;border-radius:10px;background:#f7faf8;color:#435149}.policy b{display:block;color:#193b29;margin-bottom:4px}
+    @media(max-width:900px){.grid{grid-template-columns:repeat(3,minmax(150px,1fr));min-width:700px}.settings-scroll{overflow-x:auto}.pair-grid,.score-guide{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:600px){main{width:min(100% - 24px,1200px)}.pair-grid,.score-guide,.policy{grid-template-columns:1fr}h1{font-size:25px}}
   </style>
 </head>
 <body><main>
   <nav><a href="index.html">전체 메뉴</a><a href="stroke-standard-settlement-4p.html">개인 일반</a><a href="stroke-8421-settlement-4p.html">개인 8421</a><a class="active" href="las-vegas-standard-settlement-4p.html">라스베가스 일반</a><a href="team-stroke-standard-settlement-4p.html">팀 일반</a><a href="team-stroke-8421-settlement-4p.html">팀 8421</a></nav>
   <h1>개인전 · 라스베가스 일반</h1>
   <p class="sub">4인 · 18홀 · 홀별 페어 점수 및 자동 페어 재편성 시뮬레이션</p>
+  <div class="score-guide">
+    <div><b>팀 합산</b>페어 2명의 스코어 합계가 낮은 팀이 1점을 획득합니다.</div>
+    <div><b>최고 대결</b>각 팀의 가장 좋은 개인 스코어를 비교해 낮은 팀이 1점을 획득합니다.</div>
+    <div><b>최하 대결</b>각 팀의 가장 높은 개인 스코어를 비교해 낮은 팀이 1점을 획득합니다.</div>
+    <div><b>스코어 가산점</b>알바트로스 +4점, 이글 +2점, 버디 +1점을 팀별로 합산합니다.</div>
+  </div>
 
   <section class="card"><h2>기본 설정</h2><div class="settings-scroll"><div class="grid">
     <label>항목점수당 포인트<input id="unit" type="number" min="0" step="100" value="100"></label>
@@ -49,7 +55,7 @@ const $=id=>document.getElementById(id);
 const uses=$('uses'), scoreInputs=$('scoreInputs'), settlements=$('settlements');
 players.forEach((p,i)=>uses.insertAdjacentHTML('beforeend',`<label>${p} 포인트 멀리건 사용 횟수<input id="m${i}" type="number" min="0" value="0"></label>`));
 defaultPars.forEach((par,h)=>{
-  scoreInputs.insertAdjacentHTML('beforeend',`<tr><td>${h+1}</td><td><input class="score" id="par${h}" type="number" min="3" max="6" value="${par}"></td>${players.map((p,i)=>`<td><input class="score" id="s${h}_${i}" type="number" min="1" max="20" value="${par}"></td>`).join('')}<td>${players.map((p,i)=>`<label style="display:inline-flex;align-items:center;gap:3px;margin:0 5px"><input class="check" id="bet${h}_${i}" type="checkbox">${p}</label>`).join('')}</td><td id="mul${h}">×1</td></tr>`);
+  scoreInputs.insertAdjacentHTML('beforeend',`<tr><td>${h+1}</td><td><input class="score" id="par${h}" type="number" min="3" max="6" value="${par}"></td>${players.map((p,i)=>`<td><input class="score" id="s${h}_${i}" type="number" min="1" max="20" value="${i===0?(par===3?par-1:par-2):par}"></td>`).join('')}<td>${players.map((p,i)=>`<label style="display:inline-flex;align-items:center;gap:3px;margin:0 5px"><input class="check" id="bet${h}_${i}" type="checkbox">${p}</label>`).join('')}</td><td id="mul${h}">×1</td></tr>`);
   settlements.insertAdjacentHTML('beforeend',`<tr><td>${h+1}</td><td id="a${h}"></td><td id="b${h}"></td><td id="sum${h}"></td><td id="best${h}"></td><td id="worst${h}"></td><td id="bonus${h}"></td><td id="v${h}"></td><td id="w${h}"></td><td id="n${h}"></td></tr>`);
 });
 function bonus(score,par){const d=score-par;return d<=-3?4:d===-2?2:d===-1?1:0}
