@@ -26,8 +26,9 @@ button,.btns button{min-height:42px!important;padding:9px 16px!important;border:
 .point-check{display:inline-flex!important;align-items:center!important;gap:2px!important;margin:0 3px 0 0!important;padding:2px 3px!important;border:0!important;background:transparent!important;font-size:11px!important;line-height:1!important}
 .point-check:last-child{margin-right:0!important}.point-check input{width:14px!important;height:14px!important;min-height:14px!important;margin:0!important;padding:0!important}
 #rounds .pill,#holes .out,#holes .mul{white-space:nowrap!important}.table-wrap table,.scroll table{min-width:max-content!important}
-</style></head><body><main>
+</style></head><body>
 <nav class="bz-nav" aria-label="시뮬레이터 이동"><a href="index.html">전체 메뉴</a><a href="stroke-standard-settlement-4p.html">개인 · 일반</a><a href="stroke-8421-settlement-4p.html">개인 · 8421</a><a class="active" href="team-stroke-standard-settlement-4p.html">팀 · 일반</a><a href="team-stroke-8421-settlement-4p.html">팀 · 8421</a></nav>
+<main>
 <section class="bz-hero"><h1>팀전 · 스트로크 일반</h1><p><b class="red">Red P1·P2</b> vs <b class="blue">Blue P3·P4</b> · 18홀 정산 시뮬레이터</p></section>
 <section class="card"><h2>기본 설정</h2><div class="grid"><label>홀 승패 1인 정산<input id="unit" type="number" value="200" step="100"></label><label>보너스 달성 차이당<input id="bonusUnit" type="number" value="100" step="100"></label><label>1인 최대 획득/손실<input id="cap" type="number" value="10000" step="1000"></label><label>배틀컵 초기값<input id="cup" type="number" value="600" step="100"></label><label>멀리건/배판 1회 비용<input id="cost" type="number" value="100" step="100"></label><label>최대 배수<input id="maxMul" type="number" value="6" min="1"></label></div><p class="hint">동타 홀은 다음 홀 배수가 +1됩니다. 팀전에는 스코어 배판이 없으며 포인트 배판은 플레이어별 최대 2회, 홀별 1회입니다.</p></section>
 <section class="card"><h2>플레이어별 사용</h2><div class="grid" id="uses"></div></section>
