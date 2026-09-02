@@ -74,6 +74,7 @@
 </section>
 <section class="card">
 <h2>홀별 스코어 입력</h2>
+<p class="hint">포인트 배판은 플레이어별 라운드당 최대 2회까지 사용할 수 있습니다.</p>
 <div class="scroll">
 <table>
 <thead>
@@ -199,7 +200,8 @@ const used=P.map((_,i)=>(+$(`m${i}`).value||0)+bets[i]),capped=total.map(v=>cap?
 <td class="${final>=0?'pos':'neg'}">${fmt(final)}</td>
 </tr>`}).join('');$('cupInfo').textContent=`배틀컵 ${cupTotal.toLocaleString()}P · 획득자 ${winners.map(i=>P[i]).join(', ')}`}
 function validateMapInput(t){const p=+t.dataset.p,c=+t.dataset.c,upper=c===0?99:(+$(`map${p}_${c-1}`).value)-1,lower=c===6?0:(+$(`map${p}_${c+1}`).value)+1,raw=+t.value||0,valid=Math.max(lower,Math.min(upper,raw));if(raw!==valid){alert(`상위 스코어 등급의 환산점수는 바로 아래 등급보다 반드시 커야 합니다. 입력 가능한 범위: ${lower}~${upper}`);t.value=valid}return valid}
-document.addEventListener('input',e=>{if(!e.target.classList.contains('map'))calc()});document.addEventListener('change',e=>{if(e.target.classList.contains('map'))validateMapInput(e.target);calc()});calc();
+function enforcePointBetLimit(t){if(!t.matches('input[id^="bet"]')||!t.checked)return true;const p=t.id.split('_')[1],count=document.querySelectorAll(`input[id^="bet"][id$="_${p}"]:checked`).length;if(count>2){t.checked=false;alert(`P${+p+1}의 포인트 배판은 라운드당 최대 2회까지 사용할 수 있습니다.`);return false}return true}
+document.addEventListener('input',e=>{enforcePointBetLimit(e.target);if(!e.target.classList.contains('map'))calc()});document.addEventListener('change',e=>{enforcePointBetLimit(e.target);if(e.target.classList.contains('map'))validateMapInput(e.target);calc()});calc();
 </script>
 </main>
 </body>
