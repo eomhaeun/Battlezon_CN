@@ -40,12 +40,15 @@ button,.btns button{min-height:42px!important;padding:9px 16px!important;border:
 header,.bz-hero{width:calc(100% - 40px)!important;max-width:1200px!important}
 main{width:100%!important;max-width:1240px!important}.flow-layout{width:100%!important}.flow-layout>.card{width:100%!important;max-width:none!important}
 @media(max-width:600px){header,.bz-hero{width:calc(100% - 24px)!important}}
+</style><style id="basic-settings-row">
+.settings{overflow-x:auto!important}.settings>.basic-settings-grid{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;width:100%!important;gap:10px!important}.settings>.basic-settings-grid .field{height:100%!important}
+@media(max-width:900px){.settings>.basic-settings-grid{grid-template-columns:repeat(5,minmax(175px,1fr))!important;min-width:925px!important}}
 </style></head>
 <body><nav class="bz-nav" aria-label="시뮬레이터 이동"><a href="index.html">전체 메뉴</a><a href="stroke-standard-settlement-4p.html">개인 · 일반</a><a class="active" href="stroke-8421-settlement-4p.html">개인 · 8421</a><a href="team-stroke-standard-settlement-4p.html">팀 · 일반</a><a href="team-stroke-8421-settlement-4p.html">팀 · 8421</a></nav><header class="bz-hero"><h1>스트로크 8421 정산 시나리오</h1><p>4인 플레이 · 플레이어별 환산점수 차이 기반 정산 시뮬레이터</p></header>
 <main><div class="grid flow-layout">
 <section class="card settings">
   <h2>기본 설정</h2>
-  <div class="form-grid">
+  <div class="form-grid basic-settings-grid">
     <div class="field"><label>8421 점수차이당 포인트</label><input id="unit" type="number" min="0" step="100" value="100"></div>
     <div class="field"><label>1인 최대 획득/손실</label><input id="cap" type="number" min="0" step="1000" value="10000"></div>
     <div class="field"><label>최대 배수</label><input id="maxMul" type="number" min="1" value="6"></div>
