@@ -158,9 +158,7 @@ P.forEach((p,i)=>$('maps').insertAdjacentHTML('beforeend',`<tr>
 </td>`).join('')}</tr>`));
 pars.forEach((par,h)=>{$('inputs').insertAdjacentHTML('beforeend',`<tr>
 <td>${h+1}</td>
-<td>
-<input class="score" id="par${h}" value="${par}" type="number" readonly>
-</td>${P.map((p,i)=>`<td>
+<td>${par}</td>${P.map((p,i)=>`<td>
 <input class="score" id="s${h}_${i}" value="${i===0?(par===3?par-1:par-2):par}" type="number" min="1" max="${par*2}">
 </td>`).join('')}<td>${P.map((p,i)=>`<label style="display:inline-flex;align-items:center;gap:3px;margin:0 5px">
 <input class="check" id="bet${h}_${i}" type="checkbox">${p}</label>`).join('')}</td>
