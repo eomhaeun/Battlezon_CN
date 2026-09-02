@@ -37,7 +37,7 @@
 
   <section class="card"><h2>플레이어별 사용</h2><div class="pair-grid" id="uses"></div></section>
 
-  <section class="card"><h2>홀별 스코어 입력</h2><p class="hint">기준 Par와 플레이어별 스코어를 입력합니다. 포인트 배판은 사용 인원 1명당 해당 홀 배수가 1배 증가하며, 무승부 시 다음 홀에 동타 배판이 +1배 누적됩니다.</p><div class="scroll"><table>
+  <section class="card"><h2>홀별 스코어 입력</h2><p class="hint">기준 Par와 플레이어별 스코어를 입력합니다. 포인트 배판은 플레이어별 라운드당 최대 2회까지 사용할 수 있으며, 사용 인원 1명당 해당 홀 배수가 1배 증가합니다. 무승부 시 다음 홀에 동타 배판이 +1배 누적됩니다.</p><div class="scroll"><table>
     <thead><tr><th>홀</th><th>기준 Par</th><th>P1 스코어</th><th>P2 스코어</th><th>P3 스코어</th><th>P4 스코어</th><th>플레이어별 포인트 배판</th><th>적용 배수</th><th>P1 정산</th><th>P2 정산</th><th>P3 정산</th><th>P4 정산</th></tr></thead><tbody id="scoreInputs"></tbody>
   </table></div></section>
 
@@ -85,6 +85,7 @@ function calculate(){
   $('cupInfo').textContent=`배틀컵 ${cupTotal.toLocaleString()}P · 획득자 ${winners.map(i=>players[i]).join(', ')}${winners.length>1?' (균등 분배)':''}`;
 }
 function fmt(v){return`${v>0?'+':''}${v.toLocaleString()}P`}
-document.addEventListener('input',calculate);document.addEventListener('change',calculate);calculate();
+function enforcePointBetLimit(t){if(!t.matches('input[id^="bet"]')||!t.checked)return true;const p=t.id.split('_')[1],count=document.querySelectorAll(`input[id^="bet"][id$="_${p}"]:checked`).length;if(count>2){t.checked=false;alert(`P${+p+1}의 포인트 배판은 라운드당 최대 2회까지 사용할 수 있습니다.`);return false}return true}
+document.addEventListener('input',e=>{enforcePointBetLimit(e.target);calculate()});document.addEventListener('change',e=>{enforcePointBetLimit(e.target);calculate()});calculate();
 </script>
 </main></body></html>
